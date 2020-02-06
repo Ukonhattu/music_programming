@@ -32,8 +32,6 @@ void firFloat( double *coeffs, double *input, double *output,
     double *inputp; /* pointer to input samples */
     int i;
     int j;
-
-    firFloatInit();
  
     /* put the new samples at the high end of the buffer */
     memcpy( &insamp[filterLength - 1], input,
@@ -42,7 +40,7 @@ void firFloat( double *coeffs, double *input, double *output,
     /* apply the filter to each input sample */
     for ( i = 0; i < length; i++ ) {
         /* calculate output n */
-        coeffp = coeffs;
+        coeffp = coeffs;        
         inputp = &insamp[filterLength - 1 + i];
         acc = 0;
         for ( j = 0; j < filterLength; j++ ) {
@@ -51,6 +49,8 @@ void firFloat( double *coeffs, double *input, double *output,
         output[i] = acc;
     }
     
-    firFloatFree();
+    // shift input samples back in time for next time
+    memmove( &insamp[0], &insamp[length],
+            (filterLength - 1) * sizeof(double) );
  
 }
