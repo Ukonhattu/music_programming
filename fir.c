@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
 #include "fir.h"
  
 /*maximum number of inputs that can be handled
@@ -16,7 +18,7 @@ double *insamp;
 /* FIR init */
 void firFloatInit( void )
 {
-    insamp = calloc(0, BUFFER_LEN * sizeof(double));
+    insamp = calloc(BUFFER_LEN, sizeof(double));
 }
 
 void firFloatFree( void ) {
@@ -24,7 +26,7 @@ void firFloatFree( void ) {
 }
  
 /* the FIR filter function */
-void firFloat( double *coeffs, double *input, double *output,
+int firFloat( double *coeffs, double *input, double *output,
        int length, int filterLength )
 {
     double acc;     /*  accumulator */
@@ -32,11 +34,13 @@ void firFloat( double *coeffs, double *input, double *output,
     double *inputp; /* pointer to input samples */
     int i;
     int j;
- 
+    if (length > MAX_INPUT_LEN) {
+        fprintf(stderr, "length > MAX_INPUT_LEN");
+        return 1;
+    }
     /* put the new samples at the high end of the buffer */
     memcpy( &insamp[filterLength - 1], input,
             length * sizeof(double) );
- 
     /* apply the filter to each input sample */
     for ( i = 0; i < length; i++ ) {
         /* calculate output n */
@@ -49,8 +53,11 @@ void firFloat( double *coeffs, double *input, double *output,
         output[i] = acc;
     }
     
+    
     // shift input samples back in time for next time
     memmove( &insamp[0], &insamp[length],
             (filterLength - 1) * sizeof(double) );
+    return 0;
+    
  
 }

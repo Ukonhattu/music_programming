@@ -1,2 +1,8 @@
 # Files I cannot publish
 sndutil*
+
+#vscode
+.vscode
+
+#audio
+*.snd
