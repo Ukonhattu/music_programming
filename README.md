@@ -5,10 +5,10 @@ This repository uses some util functions made by Kai Lassfolk. I don't have linc
 ## Usage
 There are two different filters: 63 degree fir and second degree iir.
 
-To use fir:
+To use fir:  
 `make simple_fir`  
 `./simple_fir source destination`
 
-To use iir:
+To use iir:  
 `make simple_iir`  
 `./simple_iir source destination`
